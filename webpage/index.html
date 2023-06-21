@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+</head>
+<body>
+    <form id="chat-form">
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message">
+        <button type="submit">Send</button>
+    </form>
+    <div id="response"></div>
+    <script>
+        // Get the form element
+        const form = document.getElementById("chat-form");
+
+        // Add an event listener for the form submit event
+        form.addEventListener("submit", (event) => {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            // Get the message input value
+            const message = document.getElementById("message").value;
+
+            // Call the Java program with the message input value
+            fetch(`http://localhost:8080/chatbot?message=${message}`,{
+                headers:{
+                    "Content-Type": "text/plain"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the response from the Java program
+                    const responseElement = document.createElement("p");
+                    responseElement.textContent = data.response;
+                    document.getElementById("response").appendChild(responseElement);
+                });
+
+        });
+    </script>
+</body>
+</html>
